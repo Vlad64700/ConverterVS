@@ -1,0 +1,237 @@
+namespace Converter
+{
+    public partial class Main_form : Form
+    {
+        public Control control = new Control();
+        public Main_form()
+        {
+            InitializeComponent();
+        }
+        
+        private void change_textbox1 (char ch)
+        {
+            textBox1.Text += ch;
+            control.ClickEvent((int)ch);
+            textBox2.Text = control.ed.Number;
+        }
+
+        private bool check_symbol (char ch)
+        {
+            if ((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 70) || ch == 46 || ch == 44)
+                return true;
+            else
+                return false;
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Конвертер_Load(object sender, EventArgs e)
+        {
+
+        }
+
+       
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            numericUpDown2.Value = trackBar2.Value;
+            control.Pout = trackBar2.Value;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            numericUpDown1.Value = trackBar1.Value;
+            control.Pin = trackBar1.Value;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            var number_temp = numericUpDown1.Value;
+            int number = Convert.ToInt32(number_temp);
+            if (number<2 || number>16)
+            {
+                MessageBox.Show("Используйте только диапазон 2-16");
+                numericUpDown1.Value = 10;
+                trackBar1.Value = 10;
+                control.Pin = trackBar1.Value;
+            }
+            else 
+            {
+                trackBar1.Value = number;
+                control.Pin = trackBar1.Value;
+            }
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            var number_temp = numericUpDown2.Value;
+            int number = Convert.ToInt32(number_temp);
+            if (number < 2 || number > 16)
+            {
+                MessageBox.Show("Используйте только диапазон 2-16");
+                numericUpDown2.Value = 10;
+                trackBar2.Value = 10;
+                control.Pout = trackBar2.Value;
+
+            }
+            else
+            {
+                trackBar2.Value = number;
+                control.Pout = trackBar2.Value;
+            }
+        }
+
+        
+
+        private void button0_Click(object sender, EventArgs e)
+        {
+            change_textbox1('0');
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            change_textbox1('1');
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            change_textbox1('2');
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            change_textbox1('3');
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            change_textbox1('4');
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            change_textbox1('5');
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            change_textbox1('6');
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            change_textbox1('7');
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            change_textbox1('8');
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            change_textbox1('9');
+        }
+
+        private void buttonA_Click(object sender, EventArgs e)
+        {
+            change_textbox1('A');
+        }
+
+        private void buttonB_Click(object sender, EventArgs e)
+        {
+            change_textbox1('B');
+        }
+
+        private void buttonC_Click(object sender, EventArgs e)
+        {
+            change_textbox1('C');
+        }
+
+        private void buttonD_Click(object sender, EventArgs e)
+        {
+            change_textbox1('D');
+        }
+
+        private void buttonE_Click(object sender, EventArgs e)
+        {
+            change_textbox1('E');
+        }
+
+        private void buttonF_Click(object sender, EventArgs e)
+        {
+            change_textbox1('F');
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            //если пуская строка - ничего не делаем
+            if (textBox1.Text == "")
+                return;
+            textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            numericUpDown1.Value = 10;
+            trackBar1.Value = 10;
+            numericUpDown2.Value = 10;
+            trackBar2.Value = 10;
+            control.Pin = trackBar1.Value;
+            control.Pout = trackBar2.Value;
+            control.ed.Clear();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            
+            //Если нажии shift
+            if ((int)e.KeyCode == 16)
+                return;
+            
+
+            //если пуская строка - ничего не делаем
+            if (textBox1.Text == "")
+            {
+                control.ed.Clear();
+                return;
+            }
+
+            //смотрим использовался ли верный символ
+            var text = textBox1.Text;
+            if (!check_symbol(text[text.Length - 1]))
+            {
+                MessageBox.Show("Используйте только диапазон 0-9 А-F");
+                textBox1.Text = textBox1.Text.Substring(0, text.Length - 1);
+            }
+            else
+            {
+                 control.ClickEvent((int)e.KeyCode);
+              //   textBox2.Text = control.ed.Number;
+              //  textBox2.Text = Convert.ToString((int)e.KeyCode);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            change_textbox1('.');
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            string out_str = control.DoCmnd();
+            textBox2.Text = out_str;
+
+        }
+    }
+}
