@@ -17,7 +17,7 @@ namespace Converter
             return integet_part + "." + fraction_part;
         }
 
-        //преобразование целой части числа в нужную СС, разделитель - точка.
+        //преобразование целой части числа в нужную СС, разделитель - запятая.
         public static string int_to_P(string number, byte basis)
         {
             double f_number = Convert.ToDouble(number);
@@ -32,15 +32,17 @@ namespace Converter
             return output;
         }
 
-        //преобразование дробной части числа в нужную СС, разделитель - точка. На выход: число в виде строки, основание сс и точность.
+        //преобразование дробной части числа в нужную СС, разделитель - запятая. На выход: число в виде строки, основание сс и точность.
         public static string flt_to_P(string number, byte basis, int c)
         {
+            //
+
             //проверяем есть ли вообще дробная часть
-            if (number.IndexOf(".") == -1)
+            if (number.IndexOf(".") == -1 && number.IndexOf(",") == -1)
                 return "0";
 
             string result = "";
-            number = "0" + number.Substring(number.IndexOf("."));
+            number = "0" + number.Substring(number.IndexOf(","));
             double numberDouble = double.Parse(number);
             int k = 0;
 

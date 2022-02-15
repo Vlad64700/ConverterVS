@@ -11,7 +11,7 @@ namespace Converter
         //основание системы сч. исходного числа по умолчанию
         const int pin = 10;
         //основание сч.результата по умолчанию
-        const int pout = 16;
+        const int pout = 10;
         //число резрядов в дробной части результата
         const int accuracy = 10;
         //История
@@ -43,6 +43,7 @@ namespace Converter
             string s_result;
             result = Conver_p_10.dval(ed.Number, Pin);
             s_result = Conver_10_p.Do(result, (Byte)Pout);
+            his.AddRecord(Pin, Pout, ed.Number, s_result);
             return s_result;
 
         }
@@ -53,12 +54,14 @@ namespace Converter
             if (Digit == 198 || Digit == 190 || Digit == 191 || Digit == 16)
                 Digit = 46;
 
+            //Если нажати delete
              if (Digit == 8)
              {
                 ed.Bs();
                 return;
              }
-                
+               
+             //Если нажали что-то другое
             char ch = Convert.ToChar(Digit);
             ed.AddDigit(ch);
            

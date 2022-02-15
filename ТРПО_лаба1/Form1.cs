@@ -7,20 +7,48 @@ namespace Converter
         {
             InitializeComponent();
         }
-        
-        private void change_textbox1 (char ch)
+
+        private void change_textbox1(char ch)
         {
-            textBox1.Text += ch;
-            control.ClickEvent((int)ch);
-            textBox2.Text = control.ed.Number;
+            try
+            {
+                textBox1.Text += ch;
+                control.ClickEvent((int)ch);
+                textBox2.Text = control.ed.Number;
+            }
+            catch (Exception ex) // при возникновении ошибки пока что всё сбрасывается
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+                textBox1.Text = "";
+                textBox2.Text = "";
+                numericUpDown1.Value = 10;
+                trackBar1.Value = 10;
+                numericUpDown2.Value = 10;
+                trackBar2.Value = 10;
+                control.Pin = trackBar1.Value;
+                control.Pout = trackBar2.Value;
+                control.ed.Clear();
+            }
+            
         }
 
-        private bool check_symbol (char ch)
+        private bool check_symbol(char ch)
         {
-            if ((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 70) || ch == 46 || ch == 44)
+            if ((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 70) || ch == 46 || ch == 44 || ch==8 || ch == 198 || ch == 190 || ch == 191 || ch == 16)
                 return true;
             else
                 return false;
+        }
+
+        //проверяет строку на наличие ошибок, если есть, возвращяет индекс где ошибка, иначе -1
+        private int check_symbol (string str)
+        {
+           for (int i=0; i<str.Length; i++)
+            {
+                if (!check_symbol(str[i]))
+                    return i;
+            }
+           return -1;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -33,7 +61,7 @@ namespace Converter
 
         }
 
-       
+
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
@@ -51,14 +79,14 @@ namespace Converter
         {
             var number_temp = numericUpDown1.Value;
             int number = Convert.ToInt32(number_temp);
-            if (number<2 || number>16)
+            if (number < 2 || number > 16)
             {
                 MessageBox.Show("Используйте только диапазон 2-16");
                 numericUpDown1.Value = 10;
                 trackBar1.Value = 10;
                 control.Pin = trackBar1.Value;
             }
-            else 
+            else
             {
                 trackBar1.Value = number;
                 control.Pin = trackBar1.Value;
@@ -84,7 +112,7 @@ namespace Converter
             }
         }
 
-        
+
 
         private void button0_Click(object sender, EventArgs e)
         {
@@ -172,6 +200,7 @@ namespace Converter
             if (textBox1.Text == "")
                 return;
             textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+            control.ed.Bs();
         }
 
         private void button18_Click(object sender, EventArgs e)
@@ -194,9 +223,9 @@ namespace Converter
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
-            
-            //Если нажии shift
-            if ((int)e.KeyCode == 16)
+
+            //Если нажии shift или enter
+            if ((int)e.KeyCode == 16 || e.KeyCode==Keys.Enter || (int)e.KeyCode == 17 || (int)e.KeyCode == 91)
                 return;
             
 
@@ -209,16 +238,33 @@ namespace Converter
 
             //смотрим использовался ли верный символ
             var text = textBox1.Text;
-            if (!check_symbol(text[text.Length - 1]))
+            int correct_str = check_symbol(text); //поиск индекса если есть ошибки
+            if (correct_str != -1)
             {
                 MessageBox.Show("Используйте только диапазон 0-9 А-F");
-                textBox1.Text = textBox1.Text.Substring(0, text.Length - 1);
+                textBox1.Text = textBox1.Text.Remove(correct_str, 1);
             }
             else
             {
-                 control.ClickEvent((int)e.KeyCode);
-              //   textBox2.Text = control.ed.Number;
-              //  textBox2.Text = Convert.ToString((int)e.KeyCode);
+                try
+                {
+                    if (check_symbol(Convert.ToChar((int)e.KeyCode)))
+                         control.ClickEvent((int)e.KeyCode);
+                }
+                catch (Exception ex) // при возникновении ошибки пока что всё сбрасывается
+                {
+                    MessageBox.Show($"Ошибка: {ex.Message}");
+                    textBox1.Text = "";
+                    textBox2.Text = "";
+                    numericUpDown1.Value = 10;
+                    trackBar1.Value = 10;
+                    numericUpDown2.Value = 10;
+                    trackBar2.Value = 10;
+                    control.Pin = trackBar1.Value;
+                    control.Pout = trackBar2.Value;
+                    control.ed.Clear();
+                }
+   
             }
         }
 

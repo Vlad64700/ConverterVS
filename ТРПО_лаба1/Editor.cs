@@ -37,7 +37,7 @@ namespace Converter
             }
 
             //если добавляем разделитель
-            if (ch == 46 || ch == 44)
+            if (ch == 46 || ch == 44 || ch==198 || ch==190 || ch==191 || ch==188)
             {
                 AddDelim();
                 return number;
