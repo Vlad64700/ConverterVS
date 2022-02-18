@@ -8,7 +8,7 @@ namespace Converter
     public static class Conver_p_10
     {
         //Преобразовать символ в число
-        private static double char_To_num(char ch)
+        public static double char_To_num(char ch)
         {
             // если символ лежит в отрезке ['0', '9']
             if (ch >= 48 && ch <= 57)

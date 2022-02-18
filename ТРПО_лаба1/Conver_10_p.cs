@@ -7,7 +7,7 @@ namespace Converter
         //вещественного числа n в число с системой счисления p, c - точность.
         public static string Do(double n, byte p, int c=6)
         {
-            if (p > 16 && p < 2)
+            if (p > 16 || p < 2)
                 throw new Exception("Выход за допустимый диапазон систем счисления");
 
             string number_10 = Convert.ToString(n);

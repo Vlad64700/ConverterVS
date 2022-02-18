@@ -8,26 +8,38 @@ namespace Converter
             InitializeComponent();
         }
 
+        //функция для проверки соответсия числен заданной системе счисления
+        private void checkCorrectDigits()
+        {
+            string st = textBox1.Text;
+            for (int i=0; i<st.Length; i++)
+            {
+                if (Conver_p_10.char_To_num(st[i]) > (int)numericUpDown1.Value-1)
+                    throw new Exception("Использовались симовлы недоступные для данной системы счисления");
+
+            }
+        }
         private void change_textbox1(char ch)
         {
             try
             {
                 textBox1.Text += ch;
                 control.ClickEvent((int)ch);
-                textBox2.Text = control.ed.Number;
             }
             catch (Exception ex) // при возникновении ошибки пока что всё сбрасывается
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
-                textBox1.Text = "";
-                textBox2.Text = "";
-                numericUpDown1.Value = 10;
-                trackBar1.Value = 10;
-                numericUpDown2.Value = 10;
-                trackBar2.Value = 10;
-                control.Pin = trackBar1.Value;
-                control.Pout = trackBar2.Value;
-                control.ed.Clear();
+                control.ed.Bs();
+                textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+                //textBox1.Text = "";
+                //textBox2.Text = "";
+                //numericUpDown1.Value = 10;
+                //trackBar1.Value = 10;
+                //numericUpDown2.Value = 10;
+                //trackBar2.Value = 10;
+                //control.Pin = trackBar1.Value;
+                //control.Pout = trackBar2.Value;
+                //control.ed.Clear();
             }
             
         }
@@ -223,6 +235,7 @@ namespace Converter
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
+            return; // код временно должен не работать 
 
             //Если нажии shift или enter
             if ((int)e.KeyCode == 16 || e.KeyCode==Keys.Enter || (int)e.KeyCode == 17 || (int)e.KeyCode == 91)
@@ -273,11 +286,57 @@ namespace Converter
             change_textbox1('.');
         }
 
-        private void button19_Click(object sender, EventArgs e)
+        private string onlyNumbers(string st)
         {
-            string out_str = control.DoCmnd();
-            textBox2.Text = out_str;
-
+       
+            st = st.Replace("A", "");
+            st = st.Replace("B", "");
+            st = st.Replace("C", "");
+            st = st.Replace("D", "");
+            st = st.Replace("E", "");
+            st = st.Replace("F", "");
+            return st;
         }
+        private void button19_Click(object sender, EventArgs e)
+        {  
+            //временно закоментированный код по зайцеву
+            //string out_str = control.DoCmnd();
+            //textBox2.Text = out_str;
+
+            
+            try
+            {
+                double temp;
+
+                if (textBox1.Text == "0")
+                    return;
+
+                checkCorrectDigits();
+                string in_str = textBox1.Text;
+                string temp_str;
+                //конвертируем точку в запятую
+                if (in_str.IndexOf(".") != -1)
+                    in_str = in_str.Replace('.',',');
+
+                //проверяем есть буквы для временной стороки, если есть - удаляем, необходимо для работы конвертера
+                temp_str = in_str;
+                temp_str =onlyNumbers(temp_str);
+
+                if (temp_str != "")
+                     temp= Convert.ToDouble(temp_str);
+                
+                control.ed.Number = in_str;
+
+                string out_str = control.DoCmnd();
+                textBox2.Text = out_str;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+        }
+
+       
     }
 }

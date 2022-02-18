@@ -41,10 +41,28 @@ namespace Converter
         {
             double result;
             string s_result;
+            bool hasMinus = false;
+            //проверяем на наличие минуса
+            if (ed.Number.IndexOf("-")!= -1)
+            {
+                hasMinus = true;
+                ed.Number = ed.Number.Substring(1);
+            }
+
             result = Conver_p_10.dval(ed.Number, Pin);
             s_result = Conver_10_p.Do(result, (Byte)Pout);
-            his.AddRecord(Pin, Pout, ed.Number, s_result);
-            return s_result;
+            if (hasMinus)
+            {
+                his.AddRecord(Pin, Pout, "-"+ed.Number, "-"+s_result);
+                return "-"+s_result;
+            }
+            else 
+            {
+                his.AddRecord(Pin, Pout, ed.Number, s_result);
+                return s_result;
+            }
+
+            
 
         }
         //Выполнить обработку нажатия
