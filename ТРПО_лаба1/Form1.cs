@@ -322,7 +322,7 @@ namespace Converter
                 temp_str = in_str;
                 temp_str =onlyNumbers(temp_str);
 
-                if (temp_str != "")
+                if (temp_str != "" && temp_str!=",")
                      temp= Convert.ToDouble(temp_str);
                 
                 control.ed.Number = in_str;
