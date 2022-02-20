@@ -7,6 +7,9 @@ namespace Converter
         //вещественного числа n в число с системой счисления p, c - точность.
         public static string Do(double n, byte p, int c=6)
         {
+            if (n > 2147483647)
+                throw new Exception("Выход за допустимый диапазон -2147483647...2147483647");
+
             if (p > 16 || p < 2)
                 throw new Exception("Выход за допустимый диапазон систем счисления");
 
