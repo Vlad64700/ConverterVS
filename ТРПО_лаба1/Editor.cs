@@ -29,7 +29,7 @@ namespace Converter
                 if (value.IndexOf(",") != -1)
                     value = value.Replace(',', '.');
                 this.number = value; 
-            } // штука временная, для тестирования кое-чего
+            } 
         }
 
         //Добавить символ.

@@ -31,15 +31,6 @@ namespace Converter
                 MessageBox.Show($"Ошибка: {ex.Message}");
                 control.ed.Bs();
                 textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
-                //textBox1.Text = "";
-                //textBox2.Text = "";
-                //numericUpDown1.Value = 10;
-                //trackBar1.Value = 10;
-                //numericUpDown2.Value = 10;
-                //trackBar2.Value = 10;
-                //control.Pin = trackBar1.Value;
-                //control.Pout = trackBar2.Value;
-                //control.ed.Clear();
             }
             
         }
@@ -235,50 +226,7 @@ namespace Converter
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
-            return; // код временно должен не работать 
-
-            //Если нажии shift или enter
-            if ((int)e.KeyCode == 16 || e.KeyCode==Keys.Enter || (int)e.KeyCode == 17 || (int)e.KeyCode == 91)
-                return;
-            
-
-            //если пуская строка - ничего не делаем
-            if (textBox1.Text == "")
-            {
-                control.ed.Clear();
-                return;
-            }
-
-            //смотрим использовался ли верный символ
-            var text = textBox1.Text;
-            int correct_str = check_symbol(text); //поиск индекса если есть ошибки
-            if (correct_str != -1)
-            {
-                MessageBox.Show("Используйте только диапазон 0-9 А-F");
-                textBox1.Text = textBox1.Text.Remove(correct_str, 1);
-            }
-            else
-            {
-                try
-                {
-                    if (check_symbol(Convert.ToChar((int)e.KeyCode)))
-                         control.ClickEvent((int)e.KeyCode);
-                }
-                catch (Exception ex) // при возникновении ошибки пока что всё сбрасывается
-                {
-                    MessageBox.Show($"Ошибка: {ex.Message}");
-                    textBox1.Text = "";
-                    textBox2.Text = "";
-                    numericUpDown1.Value = 10;
-                    trackBar1.Value = 10;
-                    numericUpDown2.Value = 10;
-                    trackBar2.Value = 10;
-                    control.Pin = trackBar1.Value;
-                    control.Pout = trackBar2.Value;
-                    control.ed.Clear();
-                }
-   
-            }
+           
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -299,11 +247,7 @@ namespace Converter
         }
         private void button19_Click(object sender, EventArgs e)
         {  
-            //временно закоментированный код по зайцеву
-            //string out_str = control.DoCmnd();
-            //textBox2.Text = out_str;
-
-            
+     
             try
             {
                 double temp;
@@ -337,6 +281,30 @@ namespace Converter
             
         }
 
-       
+        ////Пункт меню История.
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            HistoryForm historyForm = new HistoryForm();
+            historyForm.Show();
+            if (control.his.Count() == 0)
+            {
+                historyForm.textBox1.AppendText("История пуста");
+                return;
+            }
+            //Отобразить историю. 
+            for (int i = 0; i < control.his.Count(); i++)
+            {
+                historyForm.textBox1.AppendText(control.his[i].ToString());
+            }
+        }
+
+        ////Пункт меню Справка.
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            AboutForm a = new AboutForm();
+            a.Show();
+        }
+
+        
     }
 }

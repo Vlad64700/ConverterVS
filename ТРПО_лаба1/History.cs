@@ -22,8 +22,9 @@ namespace Converter
 
         public override string ToString()
         {
-            return number1 + $"[{p1}] = " + number2 + $"[{p2}];";
+            return number1 + $"[{p1}] = " + number2 + $"[{p2}]; \r\n";
         }
+    
     }
     public class History
     {
