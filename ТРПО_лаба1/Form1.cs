@@ -29,7 +29,8 @@ namespace Converter
             catch (Exception ex) // при возникновении ошибки пока что всё сбрасывается
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
-                control.ed.Bs();
+                if (control.ed.Number!="")
+                    control.ed.Bs();
                 textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
             }
             
